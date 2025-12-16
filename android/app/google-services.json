@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "901827665806",
+    "project_id": "timetable-19fa1",
+    "storage_bucket": "timetable-19fa1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901827665806:android:9cb54ced0d3e509c6e4edf",
+        "android_client_info": {
+          "package_name": "com.example.abhishek_time_table"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3BoHoP-UxMJ0QR3pWNsxokpzx1cnZXMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
