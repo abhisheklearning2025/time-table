@@ -216,6 +216,12 @@ class _EnterCodeTabState extends State<_EnterCodeTab> {
       if (!mounted) return;
 
       if (timetable != null) {
+        // Reload timetables to update the UI
+        final timetableProvider = context.read<TimetableProvider>();
+        await timetableProvider.loadAllTimetables();
+
+        if (!mounted) return;
+
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -388,6 +394,12 @@ class _ScanQRTabState extends State<_ScanQRTab> {
       if (!mounted) return;
 
       if (timetable != null) {
+        // Reload timetables to update the UI
+        final timetableProvider = context.read<TimetableProvider>();
+        await timetableProvider.loadAllTimetables();
+
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Locked in! Timetable imported ✨'),
@@ -587,33 +599,29 @@ class _TemplateCard extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               // Name
-              Flexible(
-                child: Text(
-                  timetable.name,
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                timetable.name,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
               // Description
               if (timetable.description?.isNotEmpty == true)
-                Flexible(
-                  child: Text(
-                    timetable.description!,
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                Text(
+                  timetable.description!,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              const Spacer(),
+              const SizedBox(height: 8),
               // Activity count
               Row(
                 children: [
@@ -623,15 +631,13 @@ class _TemplateCard extends StatelessWidget {
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(width: 4),
-                  Flexible(
-                    child: Text(
-                      '${timetable.activities.length} activities',
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        color: theme.colorScheme.primary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                  Text(
+                    '${timetable.activities.length} activities',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: theme.colorScheme.primary,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -814,14 +820,21 @@ class _TemplatePreviewSheetState extends State<_TemplatePreviewSheet> {
     });
 
     try {
+      final sharingProvider = context.read<SharingProvider>();
       final timetableProvider = context.read<TimetableProvider>();
-      final imported = await timetableProvider.duplicateTimetable(
+
+      final imported = await sharingProvider.importTemplate(
         widget.timetable.id,
       );
 
       if (!mounted) return;
 
       if (imported != null) {
+        // Reload timetables to update the UI
+        await timetableProvider.loadAllTimetables();
+
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Locked in! Template imported ✨'),

@@ -286,7 +286,11 @@ class _ImportedTab extends StatelessWidget {
             subtitle: 'Check out templates or import via share code! 👀',
             action: ElevatedButton.icon(
               onPressed: () {
-                // TODO: Navigate to import screen
+                HapticHelper.mediumImpact();
+                SmoothNavigator.push(
+                  context,
+                  const ImportTimetableScreen(),
+                );
               },
               icon: const Icon(Icons.cloud_download),
               label: const Text('Import Table'),

@@ -41,66 +41,78 @@ class TimetableCard extends StatelessWidget {
                 timetable.emoji ?? '📅',
                 style: const TextStyle(fontSize: 32),
               ),
-              const Spacer(),
-              // Badges
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Active badge
-                  if (showActiveBadge && timetable.isActive)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            size: 12,
-                            color: theme.colorScheme.primary,
+              const SizedBox(width: 8),
+              // Badges (flexible to prevent overflow)
+              Flexible(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // Active badge
+                    if (showActiveBadge && timetable.isActive)
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 3,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Active',
-                            style: GoogleFonts.inter(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.primary,
-                            ),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                        ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.star,
+                                size: 11,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 3),
+                              Flexible(
+                                child: Text(
+                                  'Active',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  const SizedBox(width: 8),
-                  // Alert status
-                  if (showAlertStatus)
-                    Icon(
-                      timetable.alertsEnabled
-                          ? Icons.notifications_active
-                          : Icons.notifications_off,
-                      size: 18,
-                      color: timetable.alertsEnabled
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                    ),
-                  // Options menu button
-                  if (onOptions != null) ...[
-                    const SizedBox(width: 4),
-                    IconButton(
-                      icon: const Icon(Icons.more_vert),
-                      iconSize: 20,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: onOptions,
-                    ),
+                    if (showActiveBadge && timetable.isActive)
+                      const SizedBox(width: 6),
+                    // Alert status
+                    if (showAlertStatus)
+                      Icon(
+                        timetable.alertsEnabled
+                            ? Icons.notifications_active
+                            : Icons.notifications_off,
+                        size: 16,
+                        color: timetable.alertsEnabled
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                      ),
+                    // Options menu button
+                    if (onOptions != null) ...[
+                      const SizedBox(width: 2),
+                      IconButton(
+                        icon: const Icon(Icons.more_vert),
+                        iconSize: 18,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
+                        onPressed: onOptions,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ],
           ),
