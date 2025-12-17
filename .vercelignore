@@ -1,0 +1,55 @@
+# Vercel ignore file
+# Files and directories to ignore during deployment
+
+# Development files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Build artifacts (except build/web)
+build/android/
+build/ios/
+build/linux/
+build/macos/
+build/windows/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Test files
+test/
+integration_test/
+coverage/
+
+# Android/iOS specific
+android/
+ios/
+linux/
+macos/
+windows/
+
+# Git
+.git/
+.gitignore
+
+# Documentation (optional, comment out if you want to include)
+# README.md
+# docs/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -575,38 +575,43 @@ class _TemplateCard extends StatelessWidget {
         onTap: () => _showTemplatePreview(context),
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Emoji
               Text(
                 timetable.emoji ?? '📅',
-                style: const TextStyle(fontSize: 48),
+                style: const TextStyle(fontSize: 40),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               // Name
-              Text(
-                timetable.name,
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
+              Flexible(
+                child: Text(
+                  timetable.name,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
               // Description
               if (timetable.description?.isNotEmpty == true)
-                Text(
-                  timetable.description!,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                Flexible(
+                  child: Text(
+                    timetable.description!,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
               const Spacer(),
               // Activity count
@@ -614,15 +619,18 @@ class _TemplateCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.event_note,
-                    size: 16,
+                    size: 14,
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(width: 4),
-                  Text(
-                    '${timetable.activities.length} activities',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: theme.colorScheme.primary,
+                  Flexible(
+                    child: Text(
+                      '${timetable.activities.length} activities',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: theme.colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

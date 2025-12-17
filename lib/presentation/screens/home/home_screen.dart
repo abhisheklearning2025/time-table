@@ -7,10 +7,13 @@ import '../../providers/current_activity_provider.dart';
 import '../../widgets/timetable/timetable_card.dart';
 import '../../widgets/common/loading_indicator.dart';
 import '../../widgets/animated/fade_in_card.dart';
+import '../../widgets/animated/smooth_page_route.dart';
 import '../../../data/models/timetable.dart';
+import '../../../core/utils/haptic_helper.dart';
 import '../detail/timetable_detail_screen.dart';
 import '../create_edit/create_edit_timetable_screen.dart';
 import '../import/import_timetable_screen.dart';
+import '../settings/settings_screen.dart';
 
 /// Home screen with tab bar for My Tables, Imported, Templates
 /// Main navigation hub for the app
@@ -79,7 +82,11 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // TODO: Navigate to settings
+              HapticHelper.lightImpact();
+              SmoothNavigator.push(
+                context,
+                const SettingsScreen(),
+              );
             },
           ),
         ],
@@ -122,11 +129,10 @@ class _HomeScreenState extends State<HomeScreen>
           if (provider.canCreateMore) {
             return FloatingActionButton.extended(
               onPressed: () {
-                Navigator.push(
+                HapticHelper.mediumImpact();
+                SmoothNavigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateEditTimetableScreen(),
-                  ),
+                  const CreateEditTimetableScreen(),
                 );
               },
               icon: const Icon(Icons.add),
@@ -138,11 +144,10 @@ class _HomeScreenState extends State<HomeScreen>
           if (provider.canImportMore) {
             return FloatingActionButton.extended(
               onPressed: () {
-                Navigator.push(
+                HapticHelper.mediumImpact();
+                SmoothNavigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const ImportTimetableScreen(),
-                  ),
+                  const ImportTimetableScreen(),
                 );
               },
               icon: const Icon(Icons.cloud_download),
@@ -561,9 +566,14 @@ class _TimetableOptionsSheet extends StatelessWidget {
       ),
     );
 
-    if (confirmed == true && context.mounted) {
-      final provider = context.read<TimetableProvider>();
-      await provider.deleteTimetable(timetable.id);
+    if (confirmed == true) {
+      // Delete haptic feedback
+      await HapticHelper.delete();
+
+      if (context.mounted) {
+        final provider = context.read<TimetableProvider>();
+        await provider.deleteTimetable(timetable.id);
+      }
     }
   }
 }

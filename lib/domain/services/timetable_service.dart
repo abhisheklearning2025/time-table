@@ -63,13 +63,21 @@ class TimetableService {
     // Create timetable
     final uuid = const Uuid();
     final now = DateTime.now();
+    final timetableId = uuid.v4();
+
+    // Update activities with the new timetable ID
+    final activitiesWithTimetableId = activities.map((activity) {
+      return activity.copyWith(
+        timetableId: timetableId,
+      );
+    }).toList();
 
     final timetable = Timetable(
-      id: uuid.v4(),
+      id: timetableId,
       name: name,
       description: description,
       emoji: emoji,
-      activities: activities,
+      activities: activitiesWithTimetableId,
       type: TimetableType.own,
       isActive: setAsActive,
       alertsEnabled: enableAlerts,
@@ -88,7 +96,17 @@ class TimetableService {
       throw Exception('Only own timetables can be edited');
     }
 
-    final updated = timetable.copyWith(updatedAt: DateTime.now());
+    // Ensure all activities have the correct timetable ID
+    final activitiesWithTimetableId = timetable.activities.map((activity) {
+      return activity.copyWith(
+        timetableId: timetable.id,
+      );
+    }).toList();
+
+    final updated = timetable.copyWith(
+      activities: activitiesWithTimetableId,
+      updatedAt: DateTime.now(),
+    );
     await _repository.updateTimetable(updated);
   }
 

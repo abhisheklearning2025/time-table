@@ -1,0 +1,121 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(ownerId) {
+      return isAuthenticated() && request.auth.uid == ownerId;
+    }
+
+    function isValidTimetable() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['id', 'name', 'ownerId', 'activities', 'createdAt']) &&
+             data.id is string &&
+             data.id.size() == 6 &&  // Share code is 6 characters
+             data.name is string &&
+             data.name.size() > 0 &&
+             data.name.size() <= 100 &&
+             data.ownerId is string &&
+             data.activities is list &&
+             data.activities.size() <= 50 &&  // Max 50 activities per timetable
+             data.createdAt is timestamp;
+    }
+
+    function isValidShareCode(shareCode) {
+      return shareCode is string &&
+             shareCode.size() == 6 &&
+             shareCode.matches('[A-Z0-9]{6}');
+    }
+
+    // Timetables collection - for sharing between users
+    match /timetables/{shareCode} {
+
+      // Anyone can read shared timetables (required for importing)
+      allow read: if isValidShareCode(shareCode);
+
+      // Only authenticated users can create timetables
+      allow create: if isAuthenticated() &&
+                      isValidShareCode(shareCode) &&
+                      isValidTimetable() &&
+                      request.resource.data.ownerId == request.auth.uid &&
+                      // Prevent creating too many shares (rate limiting)
+                      request.resource.data.createdAt == request.time;
+
+      // Only owner can update their timetable
+      allow update: if isOwner(resource.data.ownerId) &&
+                      isValidTimetable() &&
+                      // Prevent changing critical fields
+                      request.resource.data.id == resource.data.id &&
+                      request.resource.data.ownerId == resource.data.ownerId &&
+                      request.resource.data.createdAt == resource.data.createdAt;
+
+      // Only owner can delete their timetable
+      allow delete: if isOwner(resource.data.ownerId);
+
+      // Update view count and import count (increment only)
+      match /stats/{statId} {
+        allow read: if true;
+        allow write: if isAuthenticated() &&
+                       request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['viewCount', 'importCount']);
+      }
+    }
+
+    // Templates collection - curated public timetables
+    match /templates/{templateId} {
+
+      // Anyone can read templates (for browsing)
+      allow read: if true;
+
+      // Only admin can create/update/delete templates
+      // Admin check: User must have custom claim 'admin: true'
+      allow write: if isAuthenticated() &&
+                     request.auth.token.get('admin', false) == true;
+
+      // Template stats (view/import counts)
+      match /stats/{statId} {
+        allow read: if true;
+        allow write: if isAuthenticated() &&
+                       request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['viewCount', 'importCount']);
+      }
+    }
+
+    // User data collection (optional - for future features)
+    match /users/{userId} {
+
+      // Users can read their own data
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+
+      // Users can create/update their own data
+      allow create, update: if isAuthenticated() &&
+                              request.auth.uid == userId &&
+                              request.resource.data.uid == userId;
+
+      // Users can delete their own data
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Analytics collection (for tracking app usage - optional)
+    match /analytics/{eventId} {
+
+      // No read access (admin only via server)
+      allow read: if false;
+
+      // Authenticated users can write analytics events
+      allow create: if isAuthenticated() &&
+                      request.resource.data.userId == request.auth.uid &&
+                      request.resource.data.timestamp == request.time;
+    }
+
+    // Deny all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

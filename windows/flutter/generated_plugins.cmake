@@ -3,10 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  app_links
   audioplayers_windows
   cloud_firestore
   firebase_auth
   firebase_core
+  permission_handler_windows
+  sentry_flutter
   share_plus
   url_launcher_windows
 )

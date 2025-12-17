@@ -160,6 +160,7 @@ class _ActivityListItem extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   activity.title,
@@ -174,23 +175,27 @@ class _ActivityListItem extends StatelessWidget {
                 const SizedBox(height: 2),
                 Row(
                   children: [
-                    Text(
-                      '${activity.time} - ${activity.endTime}',
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        color: theme.colorScheme.onSurface
-                            .withValues(alpha: 0.6),
+                    Flexible(
+                      child: Text(
+                        '${activity.time} - ${activity.endTime}',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.6),
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 4),
                     Text(
                       '•',
                       style: TextStyle(
+                        fontSize: 11,
                         color: theme.colorScheme.onSurface
                             .withValues(alpha: 0.4),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 4),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 6,

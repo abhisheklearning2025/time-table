@@ -18,21 +18,72 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TimeTable - Organize your day the Gen-Z way. Multi-user timetable platform with sharing and audio alerts.">
+
+  <!-- SEO Meta Tags -->
+  <meta name="keywords" content="timetable, schedule, planner, time management, productivity, Gen-Z, alerts, notifications">
+  <meta name="author" content="TimeTable">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="TimeTable - Your Smart Schedule Manager">
+  <meta property="og:description" content="Create, share, and manage your daily schedule with audio alerts and notifications">
+  <meta property="og:type" content="website">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="abhishek_time_table">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TimeTable">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>abhishek_time_table</title>
+  <title>TimeTable - Smart Schedule Manager</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Loading indicator */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1a1a2e;
+    }
+
+    .loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
+  <!-- Loading indicator (shown while Flutter loads) -->
+  <div class="loading">
+    <div class="spinner"></div>
+    <div>Loading TimeTable...</div>
+  </div>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

@@ -12,6 +12,10 @@ import '../domain/services/timetable_service.dart';
 import '../domain/services/audio_service.dart';
 import '../domain/services/notification_service.dart';
 import '../domain/services/background_service.dart';
+import '../domain/services/permission_service.dart';
+import '../domain/services/deep_link_service.dart';
+import '../domain/services/analytics_service.dart';
+import '../domain/services/performance_service.dart';
 
 // Data Sources
 import '../data/data_sources/templates/template_loader_service.dart';
@@ -46,6 +50,16 @@ Future<void> setupDependencyInjection() async {
 
   // Phase 4: Register template service
   getIt.registerLazySingleton<TemplateLoaderService>(() => TemplateLoaderService());
+
+  // Register permission service
+  getIt.registerLazySingleton<PermissionService>(() => PermissionService());
+
+  // Register deep link service
+  getIt.registerLazySingleton<DeepLinkService>(() => DeepLinkService());
+
+  // Phase 19: Register analytics and performance services
+  getIt.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
+  getIt.registerLazySingleton<PerformanceService>(() => PerformanceService());
 
   // Phase 5: Register audio, notification, and background services
   getIt.registerLazySingleton<AudioService>(
